@@ -20,11 +20,10 @@ export default function App() {
 
   // Auto-connect to sync server if URL saved
   useEffect(() => {
-    const savedUrl = localStorage.getItem('bbp_sync_url');
+    // Always attempt to connect to the public Supabase leaderboard on app start.
+    // This enforces global leaderboard visibility and helps keep clients in-sync.
     const username = useGameStore.getState().userProfile.username;
-    if (savedUrl) {
-      networkSync.connect(savedUrl, username);
-    }
+    void networkSync.connect('supabase', username);
 
     // Listen for BroadcastChannel updates from other tabs
     let bc: BroadcastChannel | null = null;

@@ -238,6 +238,12 @@ export const useGameStore = create<GameStore>()(
       },
 
       startGame: () => {
+        // Enforce online-only play: require network sync connection before starting.
+        if (!networkSync.connected) {
+          // Redirect user to Settings to connect to the global leaderboard.
+          set({ phase: 'settings' });
+          return;
+        }
         const shapes = generateThreePieces();
         const pieces: Piece[] = shapes.map((shape, i) => ({
           id: `piece_${Date.now()}_${i}`,
@@ -279,6 +285,11 @@ export const useGameStore = create<GameStore>()(
       },
 
       startGameWithMode: (mode: GameModeType) => {
+        // Enforce online-only play: require network sync connection before starting.
+        if (!networkSync.connected) {
+          set({ phase: 'settings' });
+          return;
+        }
         const config = getGameMode(mode);
         const shapes = generateThreePieces();
         const pieces: Piece[] = shapes.map((shape, i) => ({
