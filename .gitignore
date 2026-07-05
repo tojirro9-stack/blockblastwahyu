@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.DS_Store
+.vscode/
+.idea/
+*.log
+npm-debug.log*
+yarn-error.log*
+android/app/build/
+android/.gradle/
+android/.idea/
+*.tmp
+*.swp
