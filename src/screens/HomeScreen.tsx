@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { useGameStore } from '@/stores/gameStore';
+import { networkSync } from '@/lib/networkSync';
 import { getTheme } from '@/lib/themes';
 import {
   Play,
@@ -25,6 +27,12 @@ export default function HomeScreen() {
   } = useGameStore();
 
   const theme = getTheme(currentTheme);
+
+  const [connected, setConnected] = useState(networkSync.connected);
+  useEffect(() => {
+    const cleanup = networkSync.on({ onStatus: (s) => setConnected(s) });
+    return cleanup;
+  }, []);
 
   const menuItems = [
     {
@@ -110,6 +118,13 @@ export default function HomeScreen() {
           </span>
         </div>
       </div>
+
+      {/* Offline banner */}
+      {!connected && (
+        <div className="w-full px-4 py-2 text-center font-bold z-20" style={{ backgroundColor: '#7C3AED20', color: theme.colors.textPrimary }}>
+          Offline — connect to the global leaderboard in Settings to play.
+        </div>
+      )}
 
       {/* Content */}
       <div className="flex-1 flex flex-col items-center justify-center w-full max-w-md px-6 z-10">
